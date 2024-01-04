@@ -25,15 +25,21 @@ const routes = [
       },
 
       {
+        path: '/ncm',
+        name: 'Ncm',
+        component: () => import('@/views/Ncm.vue'),
+      },
+
+      {
         path: '/entrada',
         name: 'Input',
         component: () => import('@/views/Input.vue'),
       },
 
       {
-        path: '/ncm',
-        name: 'Ncm',
-        component: () => import('@/views/Ncm.vue'),
+        path: '/saida',
+        name: 'Output',
+        component: () => import('@/views/Output.vue'),
       },
 
       {

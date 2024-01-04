@@ -4,12 +4,12 @@
       <form @submit.prevent="submit">
         <v-card-title>Requisição de entrada</v-card-title>
         <v-text-field
-          v-model.lazy="entradaSelecionda.date"
+          v-model.lazy="entradaSelecionada.date"
           label="Emissão"
           type="date"
         ></v-text-field>
         <v-select
-          v-model="entradaSelecionda.product_id"
+          v-model="entradaSelecionada.product_id"
           :items="productList"
           item-title="name"
           item-value="id"
@@ -17,27 +17,26 @@
           label="Item"
         ></v-select>
         <v-text-field
-          v-model="entradaSelecionda.balance"
+          v-model="entradaSelecionada.balance"
           label="Quantidade"
           type="number"
         ></v-text-field>
 
         <v-btn class="me-4" color="green" @click.prevent="salvar">Gravar</v-btn>
-
         <v-btn>Cancelar</v-btn>
       </form>
     </v-card>
 
     <modal-success
       :dialogExterno="dialogSuccess"
-      :texto="`A requisição de entrada foi cadastrada com sucesso !`"
+      :texto="`A requisição de entrada foi cadastrada com sucesso!`"
       @change="dialogSuccess = $event"
     />
 
     <modal-error
       :dialogExterno="dialogError"
       @change="dialogError = $event"
-      :texto="`Erro ao cadastrar a requisição de entrada !`"
+      :texto="`Erro ao cadastrar a requisição de entrada!`"
       :errormessage="`${error}`"
     />
   </div>
@@ -56,7 +55,11 @@ export default {
 
   data() {
     return {
-      entradaSelecionda: {},
+      entradaSelecionada: {
+        date: null,
+        product_id: null,
+        balance: null,
+      },
       productList: [],
       dialogSuccess: false,
       dialogError: false,
@@ -85,15 +88,13 @@ export default {
 
     async salvar() {
       try {
-     
-        entrada = await api.post("input", this.entradaSelecionada);
+        const entrada = await api.post("input", this.entradaSelecionada);
 
         this.dialogSuccess = true;
       } catch (error) {
         console.error(error);
         this.error = error;
         this.dialogError = true;
-        console.log("produto: ", this.entradaSelecionda);
       }
     },
   },

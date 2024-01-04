@@ -51,23 +51,37 @@
 export default {
   data: () => ({
     drawer: false,
+    entradas: null, 
+    saidas: null,
+    transferencias: null,
    
   }),
 
   methods: {
-    navigateToPage(category, page) {
-      if (page === "Novo") {
-        // Redirecione para a rota correspondente ao componente 'Product' ou 'Transaction'
-        const componentName =
-          category === "Produto" ? "Product" : "Transaction";
+     navigateToPage(category, page) {
+      if (page === 'Novo') {
+        const componentName = category === 'Produto' ? 'Product' : 'Transaction';
         this.$router.push({ name: componentName });
+      } else if (category === 'Requisicoes') {
+        // Mapear as opções do Vuex para os caminhos corretos no Vue Router
+        const routeMapping = {
+          'Entrada': 'Input',
+          'Saida': 'Output', 
+          'Transferencia': 'Transfer', 
+        };
+        const routeName = routeMapping[page];
+        if (routeName) {
+          this.$router.push({ name: routeName });
+        } else {
+          console.warn(`Rota não mapeada para a opção "${page}"`);
+        }
       } else {
-        console.log("Botão Consulta clicado");
+        console.log('Botão Consulta clicado');
       }
     },
-    
+
     navigateToNcm() {
-      this.$router.push({ name: "Ncm" });
+      this.$router.push({ name: 'Ncm' });
     },
   },
 
