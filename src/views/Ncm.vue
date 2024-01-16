@@ -1,11 +1,4 @@
 <template>
-  <!--Verifica a quantidade de ncm, caso seja 0 a mensagem no v-card é exibida--->
-  <div v-if="ncm.length === 0" style="display: grid; justify-items: center">
-    <v-card>
-      <v-card-text>Não há NCM cadastrado!</v-card-text>
-    </v-card>
-  </div>
-
   <div style="display: grid; justify-items: center">
     <v-list max-width="500" width="100%">
       <v-list-item v-for="ncm in ncm" :key="ncm.id">
@@ -48,7 +41,7 @@
       :texto="`O NCM ${ncmSelecionado.name} foi cadastrado com sucesso!`"
     />
 
-     <modal-error
+    <modal-error
       :dialogExterno="dialogError"
       @change="dialogError = $event"
       :texto="`Erro ao cadastrar o NCM ${ncmSelecionado.name}!`"
@@ -64,10 +57,19 @@
       <v-text-field
         label="Codigo"
         type="number"
+        :rules="codeRules"
         v-model="ncmSelecionado.code"
       />
     </modal-ncm>
   </div>
+
+  <!--Verifica a quantidade de ncm, caso seja 0 a mensagem no v-card é exibida--->
+  <div v-show="ncm.length === 0" style="display: grid; justify-items: center">
+    <v-card>
+      <v-card-text>Não há NCM cadastrado!</v-card-text>
+    </v-card>
+  </div>
+
 </template>
 
 <script>
@@ -77,7 +79,6 @@ import ModalSuccess from "@/components/ModalSuccess.vue";
 import ModalError from "@/components/ModalError.vue";
 
 import { api } from "../service/api.js";
-
 
 export default {
   components: {
@@ -96,6 +97,16 @@ export default {
       dialogSuccess: false,
       dialogError: false,
       error: null,
+
+      codeRules: [
+        (value) => {
+          if (!value || value.length !== 8) {
+            return "O código deve conter exatamente 8 dígitos.";
+          }
+
+          return true;
+        },
+      ],
     };
   },
 
@@ -144,8 +155,8 @@ export default {
         this.dialogSuccess = true;
       } catch (error) {
         console.log(error);
-        this.error = error
-        this.dialogError = true; 
+        this.error = error;
+        this.dialogError = true;
       }
     },
   },
@@ -155,7 +166,7 @@ export default {
       const response = await api.get("ncm");
       this.ncm = response.data;
     } catch (error) {
-      alert("Falha ao conectar com o servidor!")
+      alert("Falha ao conectar com o servidor!");
       console.error("Erro ao carregar a lista de NCMs:", error);
     }
   },

@@ -13,7 +13,7 @@
           :items="productList"
           item-title="name"
           item-value="id"
-          @click="carregarProductList"
+          @click="loadProductList"
           label="Item"
         ></v-select>
         <v-text-field
@@ -23,7 +23,7 @@
         ></v-text-field>
 
         <v-btn class="me-4" color="green" @click.prevent="salvar">Gravar</v-btn>
-        <v-btn>Cancelar</v-btn>
+        <v-btn @click="limparFormulario">Cancelar</v-btn>
       </form>
     </v-card>
 
@@ -68,7 +68,7 @@ export default {
   },
 
   methods: {
-    async carregarProductList() {
+    async loadProductList() {
       try {
         const response = await api.get("product");
         if (response.data && Array.isArray(response.data)) {
@@ -91,11 +91,16 @@ export default {
         const entrada = await api.post("input", this.entradaSelecionada);
 
         this.dialogSuccess = true;
+        this.limparFormulario();
       } catch (error) {
         console.error(error);
         this.error = error;
         this.dialogError = true;
       }
+    },
+
+    limparFormulario() {
+      this.entradaSelecionada = {};
     },
   },
 };

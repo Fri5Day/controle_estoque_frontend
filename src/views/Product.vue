@@ -6,6 +6,7 @@
         <v-text-field
           v-model="produtoSelecionado.name"
           label="Nome"
+          @input="onInputChange"
         ></v-text-field>
         <v-select
           v-model="produtoSelecionado.ncmId"
@@ -33,7 +34,7 @@
         ></v-text-field>
 
         <v-btn class="me-4" @click="salvar" color="green"> Gravar </v-btn>
-        <v-btn> Cancelar </v-btn>
+        <v-btn @click="limparFormulario"> Cancelar </v-btn>
       </form>
     </v-card>
 
@@ -74,6 +75,10 @@ export default {
   },
 
   methods: {
+    onInputChange() {
+      this.produtoSelecionado.name = this.produtoSelecionado.name.toUpperCase();
+    },
+
     async carregarNcmList() {
       try {
         const response = await api.get("ncm");
@@ -113,14 +118,18 @@ export default {
         } else {
           // Novo produto
           produto = await api.post("product", this.produtoSelecionado);
-
           this.dialogSuccess = true;
+          this.limparFormulario();
         }
       } catch (error) {
         console.error(error);
         this.error = error;
         this.dialogError = true;
       }
+    },
+
+    limparFormulario() {
+      this.produtoSelecionado = {};
     },
   },
 };
