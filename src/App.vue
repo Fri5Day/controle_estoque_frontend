@@ -11,11 +11,10 @@
       <v-spacer></v-spacer>
 
       <v-btn variant="text" icon="mdi-dots-vertical"></v-btn>
-      
     </v-app-bar>
 
     <v-navigation-drawer v-model="drawer" location="left" temporary>
-      <v-list >
+      <v-list>
         <v-list-group
           v-for="category in $store.state.categories"
           :key="category.name"
@@ -33,7 +32,7 @@
           </v-list-item>
         </v-list-group>
 
-         <v-list-item @click="navigateToNcm">
+        <v-list-item @click="navigateToNcm">
           <v-btn variant="text">NCM</v-btn>
         </v-list-item>
       </v-list>
@@ -48,47 +47,53 @@
 </template>
 
 <script>
+
+
 export default {
   data: () => ({
     drawer: false,
-    entradas: null, 
+    entradas: null,
     saidas: null,
-    transferencias: null,
-   
+    transferencias: null
   }),
 
   methods: {
-     navigateToPage(category, page) {
-      if (page === 'Novo') {
-        const componentName = category === 'Produto' ? 'Product' : 'Transaction';
-        this.$router.push({ name: componentName });
-      } else if (category === 'Requisicoes') {
+    navigateToPage(category, page) {
+      if (page === "Novo") {
+        const componentName = category === "Produto" ? "Product" : "Transaction"
+        this.$router.push({ name: componentName })
+      } else if (category === "Requisicoes") {
         // Mapear as opções do Vuex para os caminhos corretos no Vue Router
         const routeMapping = {
-          'Entrada': 'Input',
-          'Saida': 'Output', 
-          'Transferencia': 'Transfer', 
-        };
-        const routeName = routeMapping[page];
+          Entrada: "Input",
+          Saida: "Output",
+          Transferencia: "Transfer"
+        }
+        const routeName = routeMapping[page]
         if (routeName) {
-          this.$router.push({ name: routeName });
+          this.$router.push({ name: routeName })
         } else {
-          console.warn(`Rota não mapeada para a opção "${page}"`);
+          console.warn(`Rota não mapeada para a opção "${page}"`)
         }
       } else {
-        console.log('Botão Consulta clicado');
+        if(category == "Produto"){
+          this.$router.push({ name: "ProductConsult" })
+        }else if(category == "Transacao"){
+          this.$router.push({ name: "TransactionConsult" })
+        }
+
       }
     },
 
     navigateToNcm() {
-      this.$router.push({ name: 'Ncm' });
-    },
+      this.$router.push({ name: "Ncm" })
+    }
   },
 
   watch: {
     group() {
-      this.drawer = false;
-    },
-  },
-};
+      this.drawer = false
+    }
+  }
+}
 </script>

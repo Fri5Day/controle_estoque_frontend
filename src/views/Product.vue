@@ -56,7 +56,7 @@
 <script>
 import ModalSuccess from "@/components/ModalSuccess.vue";
 import ModalError from "@/components/ModalError.vue";
-import { api } from "@/service/api.js";
+import { api } from "@/services/api.js";
 
 export default {
   components: {
